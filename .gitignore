@@ -1,4 +1,6 @@
 /venv/
 /config.py
+/gunicorn_config.py
 /.idea/
 *__pycache__/
+/ageless-sol-365111-e7f79a255cd5.json!/ageless-sol-365111-e7f79a255cd5.json
