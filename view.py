@@ -175,7 +175,7 @@ selected_buttons_params = dict()
 
 
 @app.route('/', methods=['POST', 'GET'])
-async def index():
+def index():
     show_tariff_menu = Message.query.filter(Message.slug == 'show_menu_tariffs').first()
     show_periods_menu = Message.query.filter(Message.slug == 'show_menu_periods').first()
     show_blockchains_menu = Message.query.filter(Message.slug == 'show_menu_blockchains').first()
