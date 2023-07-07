@@ -1,6 +1,6 @@
-from app import app
-from app import db
-import view
+# from app import app
+# from app import db
+from view import *
 
 
 if __name__ == '__main__':
