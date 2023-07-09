@@ -100,7 +100,7 @@ class Channel(db.Model):
         super(Channel, self).__init__(*args, **kwargs)
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, unique=True)
+    name = db.Column(db.String(300), unique=True)
     created = db.Column(db.DateTime, default=datetime.now())
 
     def __repr__(self):
