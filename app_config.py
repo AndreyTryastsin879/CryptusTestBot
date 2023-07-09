@@ -8,3 +8,4 @@ class Configuration:
     SECRET_KEY = config.SECRET_KEY
     SECURITY_PASSWORD_SALT = config.SECURITY_PASSWORD_SALT
     SECURITY_PASSWORD_HASH = config.SECURITY_PASSWORD_HASH
+    REDIS_URL = 'redis://localhost:6379/0'

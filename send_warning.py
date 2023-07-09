@@ -10,18 +10,6 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('ageless-sol-3651
                                                                ['https://spreadsheets.google.com/feeds',
                                                                 'https://www.googleapis.com/auth/drive'])
 
-gc = gspread.authorize(credentials)
-
-worksheet = gc.open_by_key(spreadsheet_key).worksheet(worksheet_name)
-
-df = get_google_sheet_create_dataframe(worksheet)
-
-df_active_users = df[df['Статус подписки'] == 'Active']
-df_active_users_got_warning = df_active_users[df_active_users['Количество предупреждений'] > 0]
-
-list_of_clients_with_warning = df_active_users_got_warning['Телеграм ID'].to_list()
-list_of_unique_clients_with_warning = list(set(list_of_clients_with_warning))
-
 
 def send_message_to_client_to_renew_subscription(chat_id, channel_name, displayed_text):
     keyboard = {'inline_keyboard': [[{'text': f'Продлить {channel_name}', 'callback_data': channel_name}]]}
@@ -48,9 +36,22 @@ def delete_client_from_chat(channel_id, user_id):
     print(response.json())
 
 
-for chat_id in list_of_unique_clients_with_warning:
-    print(chat_id)
-    try:
+try:
+    gc = gspread.authorize(credentials)
+
+    worksheet = gc.open_by_key(spreadsheet_key).worksheet(worksheet_name)
+
+    df = get_google_sheet_create_dataframe(worksheet)
+
+    df_active_users = df[df['Статус подписки'] == 'Active']
+    df_active_users_got_warning = df_active_users[df_active_users['Количество предупреждений'] > 0]
+
+    list_of_clients_with_warning = df_active_users_got_warning['Телеграм ID'].to_list()
+    list_of_unique_clients_with_warning = list(set(list_of_clients_with_warning))
+
+    for chat_id in list_of_unique_clients_with_warning:
+        print(chat_id)
+
         slice_by_id_dict = (df_active_users_got_warning[df_active_users_got_warning['Телеграм ID'] == chat_id]
                             .to_dict('records'))
 
@@ -88,5 +89,5 @@ for chat_id in list_of_unique_clients_with_warning:
 
                 worksheet.update('A1', updated_data)
 
-    except Exception as e:
-        print(e)
+except Exception as e:
+    print(f"Отправка сообщения о продлении или удалении Ошибка: {str(e)}")

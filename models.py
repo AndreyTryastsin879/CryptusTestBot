@@ -25,6 +25,13 @@ message_blockchains = db.Table(
 )
 
 
+message_channels = db.Table(
+    'message_channels',
+    db.Column('message_id', db.Integer, db.ForeignKey('message.id')),
+    db.Column('channel_id', db.Integer, db.ForeignKey('channel.id'))
+)
+
+
 class Message(db.Model):
     def __init__(self, *args, **kwargs):
         super(Message, self).__init__(*args, **kwargs)
@@ -39,9 +46,10 @@ class Message(db.Model):
     periods = db.relationship('Period', secondary=message_periods, backref=db.backref('messages', lazy='dynamic'))
     blockchains = db.relationship('Blockchain', secondary=message_blockchains, backref=db.backref('messages',
                                                                                                   lazy='dynamic'))
+    channels = db.relationship('Channel', secondary=message_channels, backref=db.backref('messages', lazy='dynamic'))
 
     def __repr__(self):
-        return '<Id: {}, name: {}>'.format(self.id, self.name)
+        return '<Message: {}>'.format(self.id, self.name)
 
 
 class Tariff(db.Model):
@@ -85,6 +93,18 @@ class Blockchain(db.Model):
 
     def __repr__(self):
         return 'Blockchain for payments: {}'.format(self.name)
+
+
+class Channel(db.Model):
+    def __init__(self, *args, **kwargs):
+        super(Channel, self).__init__(*args, **kwargs)
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, unique=True)
+    created = db.Column(db.DateTime, default=datetime.now())
+
+    def __repr__(self):
+        return 'Our Channels: {}'.format(self.name)
 
 
 roles_users = db.Table(

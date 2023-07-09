@@ -22,6 +22,7 @@ migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
+
 from models import *
 
 
@@ -42,10 +43,6 @@ class HomeAdminView(AdminMixin, AdminIndexView):
 
 
 admin = Admin(app, 'FlaskApp', url='/', index_view=HomeAdminView(name='Home'))
-# admin.add_view(ModelView(Message, db.session))
-# admin.add_view(ModelView(Tariff, db.session))
-# admin.add_view(ModelView(Period, db.session))
-# admin.add_view(ModelView(Blockchain, db.session))
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
@@ -55,7 +52,8 @@ class MessageView(ModelView):
     column_labels = {
         'tariffs': 'Tariffs',
         'periods': 'Periods',
-        'blockchains': 'Blockchains'
+        'blockchains': 'Blockchains',
+        'channels': 'Channels'
     }
     form_ajax_refs = {
         'tariffs': {
@@ -66,6 +64,9 @@ class MessageView(ModelView):
         },
         'blockchains': {
             'fields': ['name']
+        },
+        'channels': {
+            'fields': ['name']
         }
     }
 
@@ -74,3 +75,5 @@ admin.add_view(MessageView(Message, db.session))
 admin.add_view(ModelView(Tariff, db.session))
 admin.add_view(ModelView(Period, db.session))
 admin.add_view(ModelView(Blockchain, db.session))
+admin.add_view(ModelView(Channel, db.session))
+
