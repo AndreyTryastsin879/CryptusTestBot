@@ -410,8 +410,9 @@ def index():
 
                 if callback_query_data == 'Повторить запрос':
                     client_txn_hash = get_variable_value_from_redis('client_txn_hash', chat_id)
+                    decoded = client_txn_hash.decode('utf-8')
                     check_txn_status_and_answer(chat_id, client_user_name,
-                                                client_txn_hash, show_send_hash_message,
+                                                decoded, show_send_hash_message,
                                                 show_send_email_message)
 
                 if callback_query_data == 'back_to_tariffs':
